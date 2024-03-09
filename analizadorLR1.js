@@ -234,3 +234,5 @@ class TipoSimbolo{
            bool terminado();
            
     };*/
+
+  
