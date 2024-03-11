@@ -1,32 +1,35 @@
+ 
+ const AnalizadorLR1 = require('./analizadorLR1');
 
 const simbolos = [
-    'identificador',
-    'entero',
-    'real',
-    'cadena',
-    'tipo', // int, float, void
-    'opSuma', // +, -
-    'opMul', // *, /
-    'opRelac', // <, <=, >, >=
-    'opOr', // ||
-    'opAnd', // &&
-    'opNot', // !
-    'opIgualdad', // ==, !=
-    ';',
-    ',',
-    '(',
-    ')',
-    '{',
-    '}',
-    '=',
-    'if',
-    'while',
-    'return',
-    'else',
-    '$'
+    'identificador', // 0
+    'entero', // 1
+    'real', // 2
+    'cadena', // 3
+    'tipo',  // 4
+    'opSuma', //5
+    'opMul', //6
+    'opRelac', //7
+    'opOr', //8
+    'opAnd', //9
+    'opNot', //10
+    'opIgualdad', //11
+    ';', //12
+    ',', //13
+    '(', //14
+    ')', //15
+    '{', //16
+    '}', //17
+    '=', //18
+    'if', //19
+    'while', //20
+    'return', //21
+    'else', //22
+    '$' //23
   ];
 
 function lexer(input) {
+    const LR1 = new AnalizadorLR1();
     const tokens = [];
     //const regexIdentifier = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
     //const regexNumber = /^[0-9]+$/;
