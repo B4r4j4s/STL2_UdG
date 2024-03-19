@@ -1,5 +1,6 @@
  
- const AnalizadorLR1 = require('./analizadorLR1');
+const sintax = require('./Sintax.js');
+
 
 const simbolos = [
     'identificador', // 0
@@ -29,7 +30,6 @@ const simbolos = [
   ];
 
 function lexer(input) {
-    const LR1 = new AnalizadorLR1();
     const tokens = [];
     //const regexIdentifier = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
     //const regexNumber = /^[0-9]+$/;
@@ -63,21 +63,33 @@ function lexer(input) {
                 char = input[++index];
             }
             if(word == 'if'){
-                tokens.push({ type: 19, value: word });
+                tokens.push({ type: 19, value: word, symbol: simbolos[19]});
                 continue;
             }else if(word == 'while'){
-                tokens.push({ type: 20, value: word });
+                tokens.push({ type: 20, value: word, symbol: simbolos[20] });
                 continue;
             }else if(word == 'return'){
-                tokens.push({ type: 21, value: word });
+                tokens.push({ type: 21, value: word,  symbol: simbolos[21] });
                 continue;
             }else if(word == 'else'){
                 //marcar error si no hay if antes
-                tokens.push({ type: 22, value: word });
+                tokens.push({ type: 22, value: word, symbol: simbolos[22] });
+                continue;
+            }else if(word == 'int'){
+                //marcar error si no hay if antes
+                tokens.push({ type: 4, value: word, symbol: simbolos[4] });
+                continue;
+            }else if(word == 'void'){
+                //marcar error si no hay if antes
+                tokens.push({ type: 4, value: word, symbol: simbolos[4] });
+                continue;
+            }else if(word == 'float'){
+                //marcar error si no hay if antes
+                tokens.push({ type: 4, value: word, symbol: simbolos[4] });
                 continue;
             }
 
-            tokens.push({ type: 0, value: word });
+            tokens.push({ type: 0, value: word, symbol: simbolos[0] });
             continue;
         }
         // Cadena
@@ -86,7 +98,7 @@ function lexer(input) {
             while( input[index] != ("\"" || "\n") ){
                 word += input[index++];
             }if(input[index] == "\"") {
-                tokens.push({ type: 3, value: word + input[index++] });
+                tokens.push({ type: 3, value: word + input[index++], symbol: simbolos[3] });
                 continue;
             }else{
                 console.log('error de lexico')
@@ -106,7 +118,7 @@ function lexer(input) {
                     while (!isNaN(input[index])) {
                         number += input[index++];       
                     }
-                    tokens.push({ type: 2, value: number });   
+                    tokens.push({ type: 2, value: number, symbol: simbolos[2] });   
                     continue; 
                 }else{
                     //tokens.push({ type: 'Error', value: number});
@@ -115,25 +127,25 @@ function lexer(input) {
                 }
 
             }
-            tokens.push({ type: 1, value: number });
+            tokens.push({ type: 1, value: number, symbol: simbolos[1] });
             continue;
         }
         // operador + | -
         if(char == '+' || char == '-'){
-            tokens.push({ type: 5, value: char });
+            tokens.push({ type: 5, value: char, symbol: simbolos[5] });
             index++;
             continue;
         }
         // operador * | /
         if(char == '*' || char == '/'){
-            tokens.push({ type: 6, value: char });
+            tokens.push({ type: 6, value: char, symbol: simbolos[6] });
             index++;
             continue;
         }
         // asignacion
         if(char == '='){
             if(input[index + 1] == '='){
-                tokens.push({ type: 11, value: char +  input[++index]});
+                tokens.push({ type: 11, value: char +  input[++index], symbol: simbolos[11] });
                 index++;
                 continue;
             }
@@ -147,13 +159,13 @@ function lexer(input) {
             if(input[index + 1] == '='){
                 rel += input[++index];
             }
-            tokens.push({ type: 7, value: rel });
+            tokens.push({ type: 7, value: rel, symbol: simbolos[7] });
             index++;
             continue;
         }
         if(char == '!' ){
             if(input[index + 1] == '='){
-                tokens.push({ type: 11, value: char + input[++index]});
+                tokens.push({ type: 11, value: char + input[++index], symbol: simbolos[11] });
                 index++;
                 continue;
             }
@@ -163,52 +175,51 @@ function lexer(input) {
         }
         // And
         if(char + input[index + 1] == '&&'){
-            tokens.push({ type: 9, value: char + input[++index]});
+            tokens.push({ type: 9, value: char + input[++index], symbol: simbolos[9]});
             index++;
             continue;
         }
         // Or
         if(char == '|' && input[index + 1] == '|'){
-            tokens.push({ type: 8, value: char + input[++index]});
+            tokens.push({ type: 8, value: char + input[++index], symbol: simbolos[8] });
             index++;
             continue;
         }
         // Punto y coma
         if(char == ';'){
-            tokens.push({ type: 12, value: char });
+            tokens.push({ type: 12, value: char, symbol: simbolos[12] });
             index++;
             continue;
         }
         //Parentesis
         if(char == '('){
             ParentesisFlag++;
-            tokens.push({ type: 14, value: char });
+            tokens.push({ type: 14, value: char, symbol: simbolos[14] });
             index++;
             continue;
         }
         if(char == ')'){
             ParentesisFlag--;
-            tokens.push({ type: 15, value: char });
+            tokens.push({ type: 15, value: char, symbol: simbolos[15] });
             index++;
             continue;
         }
         //Llaves
         if(char == '{'){
             LlavesFlag++;
-            tokens.push({ type: 16, value: char });
+            tokens.push({ type: 16, value: char, symbol: simbolos[16] });
             index++;
             continue;
         }
         if(char == '}'){
             LlavesFlag--;
-            tokens.push({ type: 17, value: char });
+            tokens.push({ type: 17, value: char, symbol: simbolos[17] });
             index++;
             continue;
         }
-
         //Simbolo de varo
         if(char == '$'){
-            tokens.push({ type: 23, value: char });
+            tokens.push({ type: 23, value: char, symbol: simbolos[23] });
             index++;
             continue;
         }
@@ -219,7 +230,32 @@ function lexer(input) {
     return tokens;
 }
 
-module.exports = {
+/*module.exports = {
     lexer,
     simbolos,
-  };
+  };*/
+
+  async function procesarTokens(tokens) {
+    for (var token of tokens) {
+        var error = sintax.iteracion(token);
+        if (error){break}
+    }
+    console.log(sintax.pila)
+}
+
+
+
+async function InitProgramo() {
+    await sintax.procesarArchivoLR1();
+    
+    console.log(sintax.reglas)
+    const tokens = lexer('int var1 = 12;');
+
+   // await procesarTokens(tokens);
+
+}
+
+InitProgramo();
+
+
+
